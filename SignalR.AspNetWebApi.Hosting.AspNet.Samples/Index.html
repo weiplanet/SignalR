@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ConnectedApiController Hello World</title>
+    <style>
+        body { font-family: 'Segoe UI'; }
+        h1 { font-weight: normal; }
+        td div { width: 0; background-color: #0094ff; color: #fff; }
+        td.count { text-align: right; }
+    </style>
+</head>
+<body>
+    <h1>SignalR + Web API = ConnectedApiController</h1>
+    <table>
+        <tbody>
+            <tr class="get">
+                <td><input type="button" value="Get" /></td>
+                <td class="count"><div data-bind="text: get, barChart: get">0</div></td>
+            </tr>
+            <tr class="post">
+                <td><input type="button" value="Post" /></td>
+                <td class="count"><div data-bind="text: post, barChart: post">0</div></td>
+            </tr>
+            <tr class="put">
+                <td><input type="button" value="Put" data-qs="?id=1" /></td>
+                <td class="count"><div data-bind="text: put, barChart: put">0</div></td>
+            </tr>
+            <tr class="delete">
+                <td><input type="button" value="Delete" data-qs="?id=1" /></td>
+                <td class="count"><div data-bind="text: del, barChart: del">0</div></td>
+            </tr>
+            <tr class="patch">
+                <td><input type="button" value="Patch" data-qs="?id=1" /></td>
+                <td class="count"><div data-bind="text: patch, barChart: patch">0</div></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="Scripts/jquery-1.7.1.js"></script>
+    <script src="Scripts/jquery.signalR.js"></script>
+    <script src="Scripts/knockout.js"></script>
+    <script src="Scripts/knockout.mapping-latest.debug.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var hub = $.connection.values,
+                $table = $("table"),
+                viewModel = {
+                    get: ko.observable(0),
+                    post: ko.observable(0),
+                    put: ko.observable(0),
+                    del: ko.observable(0),
+                    patch: ko.observable(0)
+                };
+
+            // Custom knockout binding for bar size
+            ko.bindingHandlers.barChart = {
+                update: function (element, valueAccessor) {
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    $(element).css({ width: (value * 10) + "px" });
+                }
+            };
+
+            // Create client-side hub methods that server will call
+            $.extend(hub, {
+                setCallStats: function (stats) {
+                    ko.mapping.fromJS(stats, {}, viewModel);
+                },
+                called: function (cid, verb, count) {
+                    viewModel[verb](count);
+                }
+            });
+
+            // Apply the knockout bindings to the table
+            ko.applyBindings(viewModel, $table[0]);
+
+            // Start the SignalR hub connection then wire-up buttons to call Web APIs
+            $.connection.hub.start().done(function () {
+
+                $table.click(function (e) {
+                    var $el = $(e.target),
+                        verb,
+                        url;
+
+                    if (!$el.is("input")) return;
+
+                    verb = $el.attr("value").toUpperCase(),
+                    url = "api/values" + ($el.attr("data-qs") || "");
+
+                    // Call the Web API using jQuery
+                    $.ajax(url, { type: verb });
+                });
+
+            });
+        });
+    </script>
+</body>
+</html>
