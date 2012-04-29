@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\SignalR\TaskAsyncHelper.cs">
       <Link>TaskAsyncHelper.cs</Link>
     </Compile>
@@ -62,9 +65,9 @@
     <Compile Include="HttpContentExtensions.cs" />
     <Compile Include="HttpRequestHeadersExtensions.cs" />
     <Compile Include="PersistentConnectionDispatcher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\HttpRouteExtensions.cs" />
     <Compile Include="WebApiRequest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiResponse.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\SignalR.Hosting.WebApi.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
