@@ -40,6 +40,22 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20429.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.4.0.20429.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20429.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.4.0.20429.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.SelfHost">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.SelfHost.4.0.20429.0\lib\net40\System.Web.Http.SelfHost.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SignalR.Hosting.AspNet.Samples\Hubs\Benchmark\HubBench.cs">
@@ -62,6 +78,10 @@
     <ProjectReference Include="..\..\SignalR.Hosting.Self\SignalR.Hosting.Self.csproj">
       <Project>{A2BD866D-906A-4742-AB3B-DB8740830400}</Project>
       <Name>SignalR.Hosting.Self</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SignalR.Hosting.WebApi\SignalR.Hosting.WebApi.csproj">
+      <Project>{488E9D4A-D883-4F68-823B-018A11F3D13F}</Project>
+      <Name>SignalR.Hosting.WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SignalR\SignalR.csproj">
       <Project>{1B9A82C4-BCA1-4834-A33E-226F17BE070B}</Project>

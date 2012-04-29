@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net.Http;
-using SignalR.Hosting;
 
-namespace SignalR.AspNetWebApi
+namespace SignalR.Hosting.WebApi
 {
-    internal class WebApiRequest : IRequest
+    public class WebApiRequest : IRequest
     {
         private readonly HttpRequestMessage _httpRequestMessage;
-        private readonly Lazy<NameValueCollection> _cookies;
+        private readonly Lazy<IRequestCookieCollection> _cookies;
         private readonly Lazy<NameValueCollection> _form;
         private readonly Lazy<NameValueCollection> _headers;
         private readonly Lazy<NameValueCollection> _queryString;
@@ -17,16 +16,13 @@ namespace SignalR.AspNetWebApi
         {
             _httpRequestMessage = httpRequestMessage;
 
-            _cookies = new Lazy<NameValueCollection>(() => _httpRequestMessage.Headers.ParseCookies());
-
-            _form = new Lazy<NameValueCollection>(() => _httpRequestMessage.Content.ReadAsNameValueCollection());
-
-            _headers = new Lazy<NameValueCollection>(() => _httpRequestMessage.Headers.ParseHeaders());
-
+            _cookies = new Lazy<IRequestCookieCollection>(() => httpRequestMessage.Headers.ParseCookies());
+            _form = new Lazy<NameValueCollection>(() => httpRequestMessage.Content.ReadAsNameValueCollection());
+            _headers = new Lazy<NameValueCollection>(() => httpRequestMessage.Headers.ParseHeaders());
             _queryString = new Lazy<NameValueCollection>(() => Url.ParseQueryString());
         }
 
-        public NameValueCollection Cookies
+        public IRequestCookieCollection Cookies
         {
             get
             {

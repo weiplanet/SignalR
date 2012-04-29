@@ -14,7 +14,7 @@ namespace SignalR.Samples.Raw
         protected override Task OnConnectedAsync(IRequest request, string connectionId)
         {
             var userNameCookie = request.Cookies["user"];
-            if (userNameCookie != null)
+            if (userNameCookie != null && userNameCookie.Value != null)
             {
                 _clients[connectionId] = userNameCookie.Value;
                 _users[userNameCookie.Value] = connectionId;

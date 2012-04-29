@@ -1,29 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Net.Http.Headers;
+using System.Collections.Specialized;
 
-namespace SignalR.AspNetWebApi
+namespace SignalR.Hosting.WebApi
 {
     internal static class HttpRequestHeadersExtensions
     {
-        public static NameValueCollection ParseCookies(this HttpRequestHeaders headers)
-        {
-            var cookies = new NameValueCollection();
-
-            IEnumerable<string> cookieValues;
-            if (headers.TryGetValues("Cookie", out cookieValues))
-            {
-                // TODO: Parse cookies from cookie header
-
-            }
-
-            return cookies;
+        public static IRequestCookieCollection ParseCookies(this HttpRequestHeaders headers)
+        {            
+            return new CookieCollection(headers);
         }
 
         public static NameValueCollection ParseHeaders(this HttpRequestHeaders headers)
         {
             var headerValues = new NameValueCollection();
+
             foreach (var header in headers)
             {
                 foreach (var value in header.Value)
@@ -31,6 +25,7 @@ namespace SignalR.AspNetWebApi
                     headerValues.Add(header.Key, value);
                 }
             }
+
             return headerValues;
         }
     }
