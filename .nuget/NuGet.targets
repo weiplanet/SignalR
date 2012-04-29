@@ -18,6 +18,8 @@
         <PackagesDir>$(SolutionDir)packages</PackagesDir>
     </PropertyGroup>
     
+    <Import Project="$(NuGetToolsPath)\sources" />
+    
     <PropertyGroup>
         <!-- NuGet command -->
         <NuGetExePath>$(NuGetToolsPath)\nuget.exe</NuGetExePath>
@@ -27,7 +29,7 @@
         <PackageOutputDir Condition="$(PackageOutputDir) == ''">$(TargetDir.Trim('\\'))</PackageOutputDir>
 
         <!-- Package sources used to restore packages. By default will used the registered sources under %APPDATA%\NuGet\NuGet.Config -->
-        <PackageSources>""</PackageSources>
+        <PackageSources Condition="$(PackageSources) == ''">""</PackageSources>
 
         <!-- Enable the restore command to run before builds -->
         <RestorePackages Condition="$(RestorePackages) == ''">false</RestorePackages>
