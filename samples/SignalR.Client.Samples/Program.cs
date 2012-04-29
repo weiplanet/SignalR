@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignalR.Client.Hubs;
 using SignalR.Hosting.Memory;
+using System.Diagnostics;
 
 namespace SignalR.Client.Samples
 {
@@ -10,13 +11,13 @@ namespace SignalR.Client.Samples
     {
         static void Main(string[] args)
         {
-            RunInMemoryHost();
+            // RunInMemoryHost();
 
             // var hubConnection = new HubConnection("http://localhost:40476/");
 
             //RunDemoHub(hubConnection);
 
-            //RunStreamingSample();
+            RunStreamingSample();
 
             Console.ReadKey();
         }
@@ -79,7 +80,10 @@ namespace SignalR.Client.Samples
 
         private static void RunStreamingSample()
         {
-            var connection = new Connection("http://localhost:40476/Raw/raw");
+            Debug.Listeners.Add(new ConsoleTraceListener());
+            Debug.AutoFlush = true;
+
+            var connection = new Connection("http://localhost:8081/echo");
 
             connection.Received += data =>
             {
@@ -97,6 +101,12 @@ namespace SignalR.Client.Samples
             };
 
             connection.Start().Wait();
+
+            string line = null;
+            while ((line = Console.ReadLine()) != null)
+            {
+                connection.Send(line).Wait();
+            }
         }
 
         public class MyConnection : PersistentConnection
