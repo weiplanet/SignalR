@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Routing;
+using SignalR.Hubs;
 
 namespace SignalR.Hosting.WebApi
 {
@@ -90,6 +91,15 @@ namespace SignalR.Hosting.WebApi
             if (routeData == null)
             {
                 return false;
+            }
+
+            object hubsUrlValue;
+            if (routeData.Route.Defaults.TryGetValue(HttpRouteExtensions.RouteKeys.HubsBaseUrl, out hubsUrlValue))
+            {
+                var hubsUrl = (string)hubsUrlValue;
+                string fullUrl = hubsUrl.Replace("~/", _config.VirtualPathRoot);
+                connection = new HubDispatcher(fullUrl);
+                return true;
             }
 
             object connectionType;

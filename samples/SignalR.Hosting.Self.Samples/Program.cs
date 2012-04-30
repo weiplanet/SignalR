@@ -30,10 +30,7 @@ namespace SignalR.Hosting.Self.Samples
             config.Routes.MapConnection<Raw>("Raw", "raw/{*operation}");
             config.Routes.MapHubs();
 
-            var dispatcher = new HubDispatcherMessageHandler(config)
-            {
-                InnerHandler = new PersistentConnectionDispatcher(config)
-            };
+            var dispatcher = new PersistentConnectionDispatcher(config);
 
             var server = new HttpSelfHostServer(config, dispatcher);
             server.OpenAsync().Wait();

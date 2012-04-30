@@ -64,7 +64,6 @@
     <Compile Include="CookieCollection.cs" />
     <Compile Include="HttpContentExtensions.cs" />
     <Compile Include="HttpRequestHeadersExtensions.cs" />
-    <Compile Include="HubDispatcherMessageHandler.cs" />
     <Compile Include="PersistentConnectionDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\HttpRouteExtensions.cs" />
