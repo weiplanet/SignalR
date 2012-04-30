@@ -39,7 +39,11 @@ namespace SignalR.Hosting.WebApi
         public Task EndAsync(string data)
         {
             _responseMessage.Content = new StringContent(data);
-            _responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+            
+            if (!String.IsNullOrEmpty(ContentType))
+            {
+                _responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+            }
             
             return TaskAsyncHelper.Empty;
         }
