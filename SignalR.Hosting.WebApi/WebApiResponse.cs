@@ -16,6 +16,7 @@ namespace SignalR.Hosting.WebApi
 
         private int streamingInitialized;
         private bool _writeFailed;
+        private bool _ended;
         private Stream _stream;
 
         public WebApiResponse(CancellationToken cancellationToken, HttpResponseMessage responseMessage, Action sendResponse)
@@ -31,7 +32,7 @@ namespace SignalR.Hosting.WebApi
         {
             get
             {
-                return !_writeFailed && !_cancellationToken.IsCancellationRequested;
+                return !_ended && !_writeFailed && !_cancellationToken.IsCancellationRequested;
             }
         }
 
@@ -39,7 +40,7 @@ namespace SignalR.Hosting.WebApi
         {
             _responseMessage.Content = new StringContent(data);
             _responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
-
+            
             return TaskAsyncHelper.Empty;
         }
 
@@ -95,6 +96,8 @@ namespace SignalR.Hosting.WebApi
             {
                 _stream.Close();
             }
+
+            _ended = true;
         }
     }
 }

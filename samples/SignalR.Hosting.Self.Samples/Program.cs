@@ -28,8 +28,12 @@ namespace SignalR.Hosting.Self.Samples
             config.TransferMode = TransferMode.StreamedResponse;
             config.Routes.MapConnection<MyConnection>("Echo", "echo/{*operation}");
             config.Routes.MapConnection<Raw>("Raw", "raw/{*operation}");
+            config.Routes.MapHubs();
 
-            var dispatcher = new PersistentConnectionDispatcher(config);
+            var dispatcher = new HubDispatcherMessageHandler(config)
+            {
+                InnerHandler = new PersistentConnectionDispatcher(config)
+            };
 
             var server = new HttpSelfHostServer(config, dispatcher);
             server.OpenAsync().Wait();

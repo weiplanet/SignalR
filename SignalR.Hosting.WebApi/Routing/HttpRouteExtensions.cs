@@ -24,9 +24,37 @@ namespace SignalR.Hosting.WebApi
             return route;
         }
 
+        public static IHttpRoute MapHubs(this HttpRouteCollection routes)
+        {
+            return MapHubs(routes, "~/signalr");
+        }
+
+        public static IHttpRoute MapHubs(this HttpRouteCollection routes, string url)
+        {
+            routes.Remove("signalr.hubs");
+
+            string routeUrl = url;
+            if (!routeUrl.EndsWith("/"))
+            {
+                routeUrl += "/{*operation}";
+            }
+
+            routeUrl = routeUrl.TrimStart('~').TrimStart('/');
+
+            var constraints = new HttpRouteValueDictionary();
+            var values = new HttpRouteValueDictionary();
+
+            values.Add(RouteKeys.HubsBaseUrl, url);
+            var route = new HttpRoute(routeUrl, values, constraints);
+            routes.Add("signalr.hubs", route);
+
+            return route;
+        }
+
         public class RouteKeys
         {
             public static string ConnectionType = "SIGNALR_ConnectionType";
+            public static string HubsBaseUrl = "SIGNALR_HubBaseUrl";
         }
     }
 }
