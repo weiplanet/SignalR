@@ -17,7 +17,7 @@ namespace SignalR.Hosting.WebApi
             _httpRequestMessage = httpRequestMessage;
 
             _cookies = new Lazy<IRequestCookieCollection>(() => httpRequestMessage.Headers.ParseCookies());
-            _form = new Lazy<NameValueCollection>(() => httpRequestMessage.Content.ReadAsNameValueCollection());
+            _form = new Lazy<NameValueCollection>(() => httpRequestMessage.Content.ReadAsFormDataAsync().Result);
             _headers = new Lazy<NameValueCollection>(() => httpRequestMessage.Headers.ParseHeaders());
             _queryString = new Lazy<NameValueCollection>(() => Url.ParseQueryString());
         }

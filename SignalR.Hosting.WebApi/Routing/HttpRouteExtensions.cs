@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.Routing;
 using SignalR.Hosting.WebApi;
+using SignalR.Hubs;
 
 namespace SignalR
 {
@@ -61,6 +62,9 @@ namespace SignalR
             var dataTokens = new HttpRouteValueDictionary();
 
             string rawUrl = url.Replace("~/", config.VirtualPathRoot);
+
+            var assemblyLocator = new WebApiAssemblyLocator(config);
+            resolver.Register(typeof(IAssemblyLocator), () => assemblyLocator);
 
             var route = new HttpRoute(routeUrl, values, constraints, dataTokens, new HubDispatcherMessageHandler(rawUrl, resolver));
             config.Routes.Add("signalr.hubs", route);

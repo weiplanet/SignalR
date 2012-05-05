@@ -62,13 +62,13 @@
       <Link>TaskAsyncHelper.cs</Link>
     </Compile>
     <Compile Include="CookieCollection.cs" />
-    <Compile Include="HttpContentExtensions.cs" />
     <Compile Include="HttpRequestHeadersExtensions.cs" />
     <Compile Include="HubDispatcherMessageHandler.cs" />
     <Compile Include="PersistentConnectionDispatcher.cs" />
     <Compile Include="PersistentConnectionMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\HttpRouteExtensions.cs" />
+    <Compile Include="WebApiAssemblyLocator.cs" />
     <Compile Include="WebApiRequest.cs" />
     <Compile Include="WebApiResponse.cs" />
   </ItemGroup>
