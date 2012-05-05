@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http.Headers;
 using WebApiRequestHeadersExtensions = System.Net.Http.HttpRequestHeadersExtensions;
 
@@ -25,9 +24,8 @@ namespace SignalR.Hosting.WebApi
                     return null;
                 }
 
-                var values = cookieHeaderValue.Cookies.Select(c => c.Name + "=" + c.Value);
-                string value = String.Join(";", values);
-
+                CookieState state = cookieHeaderValue.Cookies.FirstOrDefault();
+                string value = state != null ? state.Value : null;
                 return new Cookie(name, value, cookieHeaderValue.Domain, cookieHeaderValue.Path);
             }
         }
