@@ -2,51 +2,21 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Routing;
-using SignalR.Hubs;
 
 namespace SignalR.Hosting.WebApi
 {
-    public class PersistentConnectionDispatcher : DelegatingHandler
+    public abstract class PersistentConnectionDispatcher : HttpMessageHandler
     {
-        protected readonly HttpConfiguration _config;
-        private readonly IDependencyResolver _resolver;
+        protected readonly IDependencyResolver _resolver;
 
-        public PersistentConnectionDispatcher(HttpConfiguration config)
-            : this(config, GlobalHost.DependencyResolver)
+        public PersistentConnectionDispatcher(IDependencyResolver resolver)
         {
-        }
-
-        public PersistentConnectionDispatcher(HttpConfiguration config, IDependencyResolver resolver)
-        {
-            _config = config;
             _resolver = resolver;
-        }
-
-        public IConnectionManager ConnectionManager
-        {
-            get
-            {
-                return _resolver.Resolve<IConnectionManager>();
-            }
-        }
-
-        public IConfigurationManager Configuration
-        {
-            get
-            {
-                return _resolver.Resolve<IConfigurationManager>();
-            }
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            PersistentConnection connection;
-            if (!TryGetConnection(request, cancellationToken, out connection))
-            {
-                return base.SendAsync(request, cancellationToken);
-            }
+            PersistentConnection connection = ResolveConnection();
 
             var tcs = new TaskCompletionSource<HttpResponseMessage>();
             var req = new WebApiRequest(request);
@@ -83,37 +53,6 @@ namespace SignalR.Hosting.WebApi
             return tcs.Task;
         }
 
-        protected virtual bool TryGetConnection(HttpRequestMessage request, CancellationToken cancellationToken, out PersistentConnection connection)
-        {
-            connection = null;
-            IHttpRouteData routeData = _config.Routes.GetRouteData(request);
-
-            if (routeData == null)
-            {
-                return false;
-            }
-
-            object hubsUrlValue;
-            if (routeData.Route.Defaults.TryGetValue(HttpRouteExtensions.RouteKeys.HubsBaseUrl, out hubsUrlValue))
-            {
-                var hubsUrl = (string)hubsUrlValue;
-                string fullUrl = hubsUrl.Replace("~/", _config.VirtualPathRoot);
-                connection = new HubDispatcher(fullUrl);
-                return true;
-            }
-
-            object connectionType;
-            if (!routeData.Route.Defaults.TryGetValue(HttpRouteExtensions.RouteKeys.ConnectionType, out connectionType))
-            {
-                return false;
-            }
-
-            var type = (Type)connectionType;
-
-            var factory = new PersistentConnectionFactory(_resolver);
-            connection = factory.CreateInstance(type);
-
-            return true;
-        }
+        protected abstract PersistentConnection ResolveConnection();
     }
 }

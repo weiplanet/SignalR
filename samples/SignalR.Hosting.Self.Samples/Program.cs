@@ -26,13 +26,11 @@ namespace SignalR.Hosting.Self.Samples
         {
             var config = new HttpSelfHostConfiguration("http://localhost:8081");
             config.TransferMode = TransferMode.StreamedResponse;
-            config.Routes.MapConnection<MyConnection>("Echo", "echo/{*operation}");
-            config.Routes.MapConnection<Raw>("Raw", "raw/{*operation}");
-            config.Routes.MapHubs();
+            config.MapConnection<MyConnection>("Echo", "echo/{*operation}");
+            config.MapConnection<Raw>("Raw", "raw/{*operation}");
+            config.MapHubs();
 
-            var dispatcher = new PersistentConnectionDispatcher(config);
-
-            var server = new HttpSelfHostServer(config, dispatcher);
+            var server = new HttpSelfHostServer(config);
             server.OpenAsync().Wait();
         }
 

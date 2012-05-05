@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Specialized;
 using System.Net.Http.Headers;
-using System.Collections.Specialized;
 
 namespace SignalR.Hosting.WebApi
 {

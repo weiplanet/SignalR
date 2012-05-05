@@ -1,37 +1,52 @@
 ﻿using System;
 using System.Web.Http;
 using System.Web.Http.Routing;
+using SignalR.Hosting.WebApi;
 
-namespace SignalR.Hosting.WebApi
+namespace SignalR
 {
     public static class HttpRouteExtensions
     {
-        public static IHttpRoute MapConnection<T>(this HttpRouteCollection routes, string name, string url) where T : PersistentConnection
+        public static IHttpRoute MapConnection<T>(this HttpConfiguration config, string name, string url) where T : PersistentConnection
         {
-            return MapConnection(routes, name, url, typeof(T));
+            return MapConnection<T>(config, name, url, GlobalHost.DependencyResolver);
         }
 
-        public static IHttpRoute MapConnection(this HttpRouteCollection routes, string name, string url, Type type)
+        public static IHttpRoute MapConnection<T>(this HttpConfiguration config, string name, string url, IDependencyResolver resolver) where T : PersistentConnection
+        {
+            return MapConnection(config, name, url, typeof(T), resolver);
+        }
+
+        public static IHttpRoute MapConnection(this HttpConfiguration config, string name, string url, Type type)
+        {
+            return MapConnection(config, name, url, type, GlobalHost.DependencyResolver);
+        }
+
+        public static IHttpRoute MapConnection(this HttpConfiguration config, string name, string url, Type type, IDependencyResolver resolver)
         {
             var constraints = new HttpRouteValueDictionary();
-
             var values = new HttpRouteValueDictionary();
-            values[RouteKeys.ConnectionType] = type;
+            var dataTokens = new HttpRouteValueDictionary();
 
-            var route = new HttpRoute(url, values, constraints);
-            routes.Add(name, route);
+            var route = new HttpRoute(url, values, constraints, dataTokens, new PersistentConnectionMessageHandler(type, resolver));
+            config.Routes.Add(name, route);
 
             return route;
         }
 
-        public static IHttpRoute MapHubs(this HttpRouteCollection routes)
+        public static IHttpRoute MapHubs(this HttpConfiguration config)
         {
-            return MapHubs(routes, "~/signalr");
+            return MapHubs(config, "~/signalr", GlobalHost.DependencyResolver);
         }
 
-        public static IHttpRoute MapHubs(this HttpRouteCollection routes, string url)
+        public static IHttpRoute MapHubs(this HttpConfiguration config, IDependencyResolver resolver)
         {
-            routes.Remove("signalr.hubs");
+            return MapHubs(config, "~/signalr", resolver);
+        }
+
+        public static IHttpRoute MapHubs(this HttpConfiguration config, string url, IDependencyResolver resolver)
+        {
+            config.Routes.Remove("signalr.hubs");
 
             string routeUrl = url;
             if (!routeUrl.EndsWith("/"))
@@ -43,18 +58,14 @@ namespace SignalR.Hosting.WebApi
 
             var constraints = new HttpRouteValueDictionary();
             var values = new HttpRouteValueDictionary();
+            var dataTokens = new HttpRouteValueDictionary();
 
-            values.Add(RouteKeys.HubsBaseUrl, url);
-            var route = new HttpRoute(routeUrl, values, constraints);
-            routes.Add("signalr.hubs", route);
+            string rawUrl = url.Replace("~/", config.VirtualPathRoot);
+
+            var route = new HttpRoute(routeUrl, values, constraints, dataTokens, new HubDispatcherMessageHandler(rawUrl, resolver));
+            config.Routes.Add("signalr.hubs", route);
 
             return route;
-        }
-
-        public class RouteKeys
-        {
-            public static string ConnectionType = "SIGNALR_ConnectionType";
-            public static string HubsBaseUrl = "SIGNALR_HubBaseUrl";
         }
     }
 }

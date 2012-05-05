@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http.Headers;
+using WebApiRequestHeadersExtensions = System.Net.Http.HttpRequestHeadersExtensions;
 
 namespace SignalR.Hosting.WebApi
 {
@@ -10,21 +12,23 @@ namespace SignalR.Hosting.WebApi
         public CookieCollection(HttpRequestHeaders headers)
         {
             _headers = headers;
-            Count = System.Net.Http.HttpRequestHeadersExtensions.GetCookies(headers).Count;
+            Count = WebApiRequestHeadersExtensions.GetCookies(headers).Count;
         }
 
         public Cookie this[string name]
         {
             get
             {
-                var cookieHeaderValue = System.Net.Http.HttpRequestHeadersExtensions.GetCookies(_headers, name).FirstOrDefault();
+                var cookieHeaderValue = WebApiRequestHeadersExtensions.GetCookies(_headers, name).FirstOrDefault();
                 if (cookieHeaderValue == null)
                 {
                     return null;
                 }
 
-                // TODO: Figure out the correct thing to pass to value
-                return new Cookie(name, null, cookieHeaderValue.Domain, cookieHeaderValue.Path);
+                var values = cookieHeaderValue.Cookies.Select(c => c.Name + "=" + c.Value);
+                string value = String.Join(";", values);
+
+                return new Cookie(name, value, cookieHeaderValue.Domain, cookieHeaderValue.Path);
             }
         }
 
