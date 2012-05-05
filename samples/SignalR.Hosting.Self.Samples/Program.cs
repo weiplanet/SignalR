@@ -19,7 +19,15 @@ namespace SignalR.Hosting.Self.Samples
 
             WebApiSelfHost();
 
-            Console.ReadKey();
+            Console.WriteLine("Press 'esc' to quit.");
+            while (true)
+            {
+                var ki = Console.ReadKey();
+                if (ki.Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+            }
         }
 
         private static void WebApiSelfHost()
@@ -32,6 +40,8 @@ namespace SignalR.Hosting.Self.Samples
 
             var server = new HttpSelfHostServer(config);
             server.OpenAsync().Wait();
+
+            Console.WriteLine("Server running on {0}", config.BaseAddress);
         }
 
         private static void DefaultSelfHost()
@@ -48,7 +58,7 @@ namespace SignalR.Hosting.Self.Samples
             server.Start();
 
             Console.WriteLine("Server running on {0}", url);
-            
+
             while (true)
             {
                 ConsoleKeyInfo ki = Console.ReadKey(true);
