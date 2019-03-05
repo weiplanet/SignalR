@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>crank</AssemblyName>
+    <Description>Load testing tool for SignalR</Description>
+    <TargetFrameworks>net45</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(PerfRun)'=='True'">
+    <DefineConstants>$(DefineConstants);PERFRUN</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CmdLine" Version="$(CmdLinePackageVersion)" />
+    <PackageReference Include="Microsoft.Owin.Diagnostics" Version="$(MicrosoftOwinDiagnosticsPackageVersion)" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="$(MicrosoftOwinHostHttpListenerPackageVersion)" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="$(MicrosoftOwinHostingPackageVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(Release_NewtonsoftJsonPackageVersion)" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Composition.Registration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TPlan.Perf.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.AspNet.SignalR.Client\Microsoft.AspNet.SignalR.Client.csproj" />
+    <ProjectReference Include="..\Microsoft.AspNet.SignalR.Core\Microsoft.AspNet.SignalR.Core.csproj" />
+  </ItemGroup>
+</Project>

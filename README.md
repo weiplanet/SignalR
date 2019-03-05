@@ -1,46 +1,42 @@
-# SignalR 
-Async signaling library for .NET to help build real-time, multi-user interactive web applications
+# ASP.NET SignalR 
+
+**IMPORTANT**: This repository hosts code and project management for ASP.NET SignalR, for use in .NET Framework applications using System.Web or Katana. If you are looking for information on ASP.NET Core SignalR, see the https://github.com/aspnet/SignalR repository.
+
+ASP.NET SignalR is a library for ASP.NET developers that makes it incredibly simple to add real-time web functionality to your applications. What is "real-time web" functionality? It's the ability to have your server-side code push content to the connected clients as it happens, in real-time.
 
 ## What can it be used for?
 Pushing data from the server to the client (not just browser clients) has always been a tough problem. SignalR makes 
 it dead easy and handles all the heavy lifting for you.
 
 ## Documentation
-See the [documentation](https://github.com/SignalR/SignalR/wiki)
+See the [documentation](http://asp.net/signalr)
 
 ## Get it on NuGet!
 
-    Install-Package SignalR
+    Install-Package Microsoft.AspNet.SignalR
 
 ## Get a sample on NuGet, straight into your app!
 
-	Install-Package SignalR.Sample
+    Install-Package Microsoft.AspNet.SignalR.Sample
 	
 ## LICENSE
-[MIT License](https://github.com/SignalR/SignalR/blob/master/LICENSE.md)
+[Apache 2.0 License](https://github.com/SignalR/SignalR/blob/master/LICENSE.txt)
+
+## Contributing
+
+See the [contribution  guidelines](https://github.com/SignalR/SignalR/blob/master/CONTRIBUTING.md)
 
 ## Building the source
+
+```
+git clone git@github.com:SignalR/SignalR.git (or https if you use https)
+```
 
 ### Windows
 After cloning the repository, run `build.cmd`.
 
-If the SignalR.Samples csproj won't load when opening the solution in Visual Studio then 
-download [Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx) and install IIS Express.
-
-### Mono
-After cloning the repository, run `make`.
-
-**NOTE:** Run `make tests` to run the unit tests. After running them it'll probably hang. If it does hang
-use `Ctrl+C` to break out (We're still working on this).
-
-Open SignalR.Mono.sln to do development.
-
-## Continuous Integration
-
-We have a CI Server setup on codebetter (http://teamcity.codebetter.com/project.html?projectId=project188)
-
-We generate packages from our ci builds to this feed http://www.myget.org/F/signalr/. If you want to live on the bleeding
-edge and don't want to clone the source. You can try things out this way.
+**NOTE:** Opening the solution requires VS 2017.
 
 ## Questions?
-The SignalR team hangs out in the [signalr](http://jabbr.net/#/rooms/signalr) room at on [JabbR](http://jabbr.net/).
+* Ask on StackOverflow with the tag [signalr](https://stackoverflow.com/questions/tagged/signalr)
+* Post an issue in the [Issue Tracker](https://github.com/SignalR/SignalR/issues)

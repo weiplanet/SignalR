@@ -1,0 +1,46 @@
+parameters:
+  queueName: ''
+  beforeBuild: []
+  afterBuild: []
+  variables:
+
+phases:
+- phase: Windows
+  queue:
+    name: ${{ parameters.queueName }}
+  variables:
+    BuildConfiguration: Release
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - checkout: self
+    clean: true
+
+  - ${{ parameters.beforeBuild }}
+
+  - script: .\build.cmd -ci /p:Configuration=$(BuildConfiguration)
+    displayName: Run build.cmd
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    condition: always()
+    inputs:
+      testRunner: vstest
+      testResultsFiles: 'artifacts/logs/**/*.trx'
+
+  - task: PublishBuildArtifacts@1
+    displayName: Upload artifacts
+    condition: and(always(), eq(variables['system.pullrequest.isfork'], false))
+    inputs:
+      pathtoPublish: artifacts/$(BuildConfiguration)/
+      artifactName: artifacts-$(BuildConfiguration)
+      artifactType: Container
+
+  - task: PublishBuildArtifacts@1
+    displayName: Upload logs
+    condition: and(always(), eq(variables['system.pullrequest.isfork'], false))
+    inputs:
+      pathtoPublish: artifacts/logs/
+      artifactName: logs-$(BuildConfiguration)
+      artifactType: Container
+
+  - ${{ parameters.afterBuild }}

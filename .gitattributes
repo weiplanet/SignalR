@@ -15,6 +15,7 @@
 
 *.cs text=auto diff=csharp 
 *.vb text=auto
+*.resx text=auto
 *.c text=auto
 *.cpp text=auto
 *.cxx text=auto
@@ -42,8 +43,8 @@
 *.fsx text=auto
 *.hs text=auto
 
-*.csproj text=auto merge=union 
-*.vbproj text=auto merge=union 
-*.fsproj text=auto merge=union 
-*.dbproj text=auto merge=union 
-*.sln text=auto eol=crlf merge=union 
+*.csproj text=auto
+*.vbproj text=auto
+*.fsproj text=auto
+*.dbproj text=auto
+*.sln text=auto eol=crlf
